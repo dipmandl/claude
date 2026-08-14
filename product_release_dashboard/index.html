@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Release Notes Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-shape bg-shape-1" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape-2" aria-hidden="true"></div>
+
+  <main class="container">
+    <header class="hero">
+      <h1>Release Notes Dashboard</h1>
+      <p>Track product updates, surface breaking changes, and keep everyone informed.</p>
+    </header>
+
+    <section class="panel" aria-labelledby="create-release-title">
+      <h2 id="create-release-title">Create a Release Note</h2>
+      <form id="release-form" class="release-form">
+        <div class="form-grid">
+          <label>
+            Product Name
+            <input type="text" id="product" name="product" placeholder="e.g., Billing API" required />
+          </label>
+
+          <label>
+            Version
+            <input type="text" id="version" name="version" placeholder="e.g., v1.4.0" required />
+          </label>
+
+          <label class="span-2">
+            Title
+            <input type="text" id="title" name="title" placeholder="e.g., Faster invoice export" required />
+          </label>
+
+          <label class="span-2">
+            Description
+            <textarea id="description" name="description" rows="4" placeholder="Describe what changed in this release." required></textarea>
+          </label>
+
+          <label>
+            Release Date
+            <input type="date" id="releaseDate" name="releaseDate" required />
+          </label>
+
+          <label class="checkbox-row">
+            <input type="checkbox" id="breaking" name="breaking" />
+            Breaking Change
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit">Add Release Note</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel" aria-labelledby="release-list-title">
+      <div class="panel-head">
+        <h2 id="release-list-title">Release List</h2>
+        <div class="filters">
+          <label>
+            Product
+            <input type="text" id="product-filter" placeholder="Filter by product" />
+          </label>
+          <label>
+            Change Type
+            <select id="breaking-filter">
+              <option value="all">All</option>
+              <option value="breaking">Breaking only</option>
+              <option value="non-breaking">Non-breaking only</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div id="release-list" class="release-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <template id="release-card-template">
+    <article class="release-card">
+      <div class="card-top">
+        <p class="product-version"></p>
+        <span class="badge"></span>
+      </div>
+      <h3 class="release-title"></h3>
+      <p class="release-description"></p>
+      <p class="release-date"></p>
+    </article>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
