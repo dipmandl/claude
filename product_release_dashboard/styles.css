@@ -135,6 +135,26 @@ select:focus {
   border-color: var(--accent);
 }
 
+.field-error {
+  display: block;
+  min-height: 1em;
+  margin-top: 2px;
+  color: var(--danger);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+input.invalid,
+textarea.invalid {
+  border-color: var(--danger);
+}
+
+input.invalid:focus,
+textarea.invalid:focus {
+  outline-color: var(--danger);
+  border-color: var(--danger);
+}
+
 .checkbox-row {
   display: flex;
   align-items: center;
