@@ -1,5 +1,8 @@
 const STORAGE_KEY = "releaseNotesDashboard.releases";
 
+// Fields validated by the form, in DOM order (drives "focus first invalid").
+const VALIDATED_FIELDS = ["product", "version", "title", "description", "releaseDate"];
+
 const releaseForm = document.getElementById("release-form");
 const releaseList = document.getElementById("release-list");
 const template = document.getElementById("release-card-template");
@@ -24,7 +27,12 @@ releaseForm.addEventListener("submit", (event) => {
     isBreaking: formData.get("breaking") === "on"
   };
 
-  if (!release.product || !release.version || !release.title || !release.description || !release.releaseDate) {
+  const { valid, errors } = validateRelease(release);
+
+  clearAllErrors();
+
+  if (!valid) {
+    showErrors(errors);
     return;
   }
 
@@ -34,8 +42,80 @@ releaseForm.addEventListener("submit", (event) => {
   renderReleaseList();
 });
 
+// Clear a field's error as soon as the user starts correcting it.
+for (const field of VALIDATED_FIELDS) {
+  const input = document.getElementById(field);
+  if (!input) {
+    continue;
+  }
+  const eventName = input.type === "date" ? "change" : "input";
+  input.addEventListener(eventName, () => clearFieldError(field));
+}
+
 productFilterInput.addEventListener("input", renderReleaseList);
 breakingFilterSelect.addEventListener("change", renderReleaseList);
+
+/**
+ * Render validation errors into the DOM, mark inputs invalid, and move focus to
+ * the first invalid field (DOM order).
+ * @param {Record<string, string>} errors
+ */
+function showErrors(errors) {
+  let firstInvalid = null;
+
+  for (const field of VALIDATED_FIELDS) {
+    const message = errors[field];
+    if (!message) {
+      continue;
+    }
+
+    const input = document.getElementById(field);
+    const errorEl = document.getElementById(`${field}-error`);
+
+    if (input) {
+      input.classList.add("invalid");
+      input.setAttribute("aria-invalid", "true");
+      if (!firstInvalid) {
+        firstInvalid = input;
+      }
+    }
+
+    if (errorEl) {
+      errorEl.textContent = message;
+    }
+  }
+
+  if (firstInvalid) {
+    firstInvalid.focus();
+  }
+}
+
+/**
+ * Remove the error state and message for a single field.
+ * @param {string} field
+ */
+function clearFieldError(field) {
+  const input = document.getElementById(field);
+  const errorEl = document.getElementById(`${field}-error`);
+
+  if (input) {
+    input.classList.remove("invalid");
+    input.removeAttribute("aria-invalid");
+  }
+
+  if (errorEl) {
+    errorEl.textContent = "";
+  }
+}
+
+/**
+ * Remove all field error states and messages.
+ */
+function clearAllErrors() {
+  for (const field of VALIDATED_FIELDS) {
+    clearFieldError(field);
+  }
+}
 
 function loadReleases() {
   const raw = localStorage.getItem(STORAGE_KEY);
