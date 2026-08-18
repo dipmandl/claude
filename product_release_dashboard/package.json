@@ -1,0 +1,17 @@
+{
+  "name": "product-release-dashboard-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright + Gherkin BDD tests for the Release Notes Dashboard (CS-50)",
+  "scripts": {
+    "test": "bddgen && playwright test",
+    "test:headed": "bddgen && playwright test --headed",
+    "test:ui": "bddgen && playwright test --ui",
+    "test:report": "bddgen && playwright test --reporter=html && playwright show-report",
+    "bddgen": "bddgen"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "playwright-bdd": "^8.2.0"
+  }
+}
