@@ -22,27 +22,32 @@
         <div class="form-grid">
           <label>
             Product Name
-            <input type="text" id="product" name="product" placeholder="e.g., Billing API" required />
+            <input type="text" id="product" name="product" placeholder="e.g., Billing API" />
+            <span class="field-error" id="error-product" aria-live="polite"></span>
           </label>
 
           <label>
             Version
-            <input type="text" id="version" name="version" placeholder="e.g., v1.4.0" required />
+            <input type="text" id="version" name="version" placeholder="e.g., v1.4.0" />
+            <span class="field-error" id="error-version" aria-live="polite"></span>
           </label>
 
           <label class="span-2">
             Title
-            <input type="text" id="title" name="title" placeholder="e.g., Faster invoice export" required />
+            <input type="text" id="title" name="title" placeholder="e.g., Faster invoice export" />
+            <span class="field-error" id="error-title" aria-live="polite"></span>
           </label>
 
           <label class="span-2">
             Description
-            <textarea id="description" name="description" rows="4" placeholder="Describe what changed in this release." required></textarea>
+            <textarea id="description" name="description" rows="4" placeholder="Describe what changed in this release."></textarea>
+            <span class="field-error" id="error-description" aria-live="polite"></span>
           </label>
 
           <label>
             Release Date
-            <input type="date" id="releaseDate" name="releaseDate" required />
+            <input type="date" id="releaseDate" name="releaseDate" />
+            <span class="field-error" id="error-releaseDate" aria-live="polite"></span>
           </label>
 
           <label class="checkbox-row">
@@ -52,6 +57,9 @@
         </div>
 
         <div class="form-actions">
+          <button type="button" id="cancel-edit" class="btn-secondary" hidden aria-label="Cancel editing">
+            Cancel
+          </button>
           <button type="submit">Add Release Note</button>
         </div>
       </form>
@@ -60,6 +68,15 @@
     <section class="panel" aria-labelledby="release-list-title">
       <div class="panel-head">
         <h2 id="release-list-title">Release List</h2>
+        <button
+          type="button"
+          id="export-btn"
+          class="btn-export"
+          aria-label="Export visible releases as CSV"
+          disabled
+        >
+          Export CSV
+        </button>
         <div class="filters">
           <label>
             Product
@@ -73,8 +90,33 @@
               <option value="non-breaking">Non-breaking only</option>
             </select>
           </label>
+          <label>
+            Search
+            <input
+              type="search"
+              id="search-filter"
+              placeholder="Search title or description"
+              aria-label="Search by title or description"
+            />
+          </label>
+          <label>
+            Sort By
+            <select id="sort-select" aria-label="Sort releases">
+              <option value="date-desc" selected>Newest first</option>
+              <option value="date-asc">Oldest first</option>
+              <option value="name-asc">Product A-Z</option>
+              <option value="name-desc">Product Z-A</option>
+            </select>
+          </label>
         </div>
       </div>
+
+      <p
+        id="results-summary"
+        class="results-summary"
+        aria-live="polite"
+        aria-atomic="true"
+      ></p>
 
       <div id="release-list" class="release-list" aria-live="polite"></div>
     </section>
@@ -89,6 +131,15 @@
       <h3 class="release-title"></h3>
       <p class="release-description"></p>
       <p class="release-date"></p>
+      <div class="card-actions">
+        <button class="btn-edit" aria-label="Edit release">Edit</button>
+        <button class="btn-delete" aria-label="Delete release">Delete</button>
+      </div>
+      <div class="delete-confirm" hidden aria-label="Delete confirmation">
+        <span class="delete-confirm-text">Are you sure?</span>
+        <button class="btn-confirm-delete">Confirm</button>
+        <button class="btn-cancel-delete">Cancel</button>
+      </div>
     </article>
   </template>
 

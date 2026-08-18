@@ -119,6 +119,7 @@ button {
 
 input[type="text"],
 input[type="date"],
+input[type="search"],
 textarea,
 select {
   width: 100%;
@@ -280,4 +281,132 @@ button:hover {
   .form-actions button {
     width: 100%;
   }
+}
+
+/* ===== CS-50 additions ===== */
+
+/* Card action row */
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Shared small-button base */
+.btn-edit,
+.btn-delete {
+  font-size: 0.82rem;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  border: 1px solid;
+}
+
+/* Edit button */
+.btn-edit {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.btn-edit:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Delete button */
+.btn-delete {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+.btn-delete:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* Inline delete confirmation row */
+.delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff8f5;
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.88rem;
+  flex-wrap: wrap;
+}
+.delete-confirm-text {
+  flex: 1;
+  color: var(--danger);
+  font-weight: 600;
+}
+.btn-confirm-delete {
+  font-size: 0.82rem;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--danger);
+  color: #fff;
+  border: 0;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-cancel-delete {
+  font-size: 0.82rem;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Cancel (secondary) button */
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-weight: 600;
+  padding: 11px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.btn-secondary:hover {
+  border-color: var(--muted);
+}
+
+/* Export button and disabled state */
+.btn-export {
+  white-space: nowrap;
+}
+button:disabled,
+.btn-export:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+  pointer-events: none;
+}
+
+/* Results summary */
+.results-summary {
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin: 8px 0 4px;
+}
+
+/* Validation error messages */
+.field-error {
+  display: none;
+  color: var(--danger);
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-top: 2px;
+}
+.field-error.visible {
+  display: block;
 }
