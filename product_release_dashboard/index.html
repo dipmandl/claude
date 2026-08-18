@@ -52,6 +52,7 @@
         </div>
 
         <div class="form-actions">
+          <button type="button" id="cancel-edit" class="btn-cancel" hidden>Cancel</button>
           <button type="submit">Add Release Note</button>
         </div>
       </form>
@@ -89,6 +90,10 @@
       <h3 class="release-title"></h3>
       <p class="release-description"></p>
       <p class="release-date"></p>
+      <div class="card-actions">
+        <button type="button" class="btn-edit" aria-label="Edit release">Edit</button>
+        <button type="button" class="btn-delete" aria-label="Delete release">Delete</button>
+      </div>
     </article>
   </template>
 
