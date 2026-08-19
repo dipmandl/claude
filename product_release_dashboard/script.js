@@ -75,6 +75,7 @@ function saveReleases(items) {
 }
 
 function deleteRelease(id) {
+  if (!window.confirm('Delete this release note? This cannot be undone.')) return;
   if (editingId === id) {
     cancelEdit();
   }
@@ -112,7 +113,7 @@ function cancelEdit() {
   cancelEditBtn.hidden = true;
 }
 
-cancelEditBtn.addEventListener("click", cancelEdit);
+cancelEditBtn.addEventListener("click", () => { cancelEdit(); renderReleaseList(); });
 
 function renderReleaseList() {
   const productQuery = productFilterInput.value.trim().toLowerCase();
@@ -153,6 +154,11 @@ function renderReleaseList() {
 
     const editBtn = card.querySelector(".btn-edit");
     const deleteBtn = card.querySelector(".btn-delete");
+
+    if (release.id === editingId) {
+      card.classList.add("editing");
+      editBtn.disabled = true;
+    }
 
     editBtn.setAttribute("aria-label", `Edit ${release.product} ${release.version}`);
     deleteBtn.setAttribute("aria-label", `Delete ${release.product} ${release.version}`);

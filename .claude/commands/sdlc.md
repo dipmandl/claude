@@ -25,7 +25,7 @@ Run SDLC directly without using `orchestrator-agent`.
 	- `current_stage: REQUIREMENT`
 	- all stages initialized with status `NOT_STARTED`
 - Determine next stage as the first stage in order with status `FAILED`, `IN_PROGRESS`, or `NOT_STARTED`:
-	- REQUIREMENT -> PLANNING -> DESIGN -> IMPLEMENTATION -> TESTING -> CODE_REVIEW -> DELIVERY
+	- REQUIREMENT -> PLANNING -> DESIGN -> IMPLEMENTATION -> TESTING -> CODE_REVIEW -> DELIVERY -> PR_REVIEW
 
 ## Single-stage execution mode
 
@@ -39,6 +39,7 @@ Run SDLC directly without using `orchestrator-agent`.
 	- TESTING -> `tests`
 	- CODE_REVIEW -> `code-review-agent`
 	- DELIVERY -> `delivery`
+	- PR_REVIEW -> `pr-review-agent`
 - Verify expected artifact exists in `.sdlc/`.
 - On success: mark stage `COMPLETED`, set reason/artifact/completed_at, and persist state.
 - On failure: mark stage `FAILED`, capture reason, set artifact `null` if missing, increment retry_count, and persist state.

@@ -9,6 +9,7 @@ tools:
   - Agent(tests)
   - Agent(code-review-agent)
   - Agent(delivery)
+  - Agent(pr-review-agent)
   - Read
   - Write
   - Edit
@@ -37,6 +38,7 @@ persistent state. Do not perform stage-specific work yourself.
 5. TESTING
 6. CODE_REVIEW
 7. DELIVERY
+8. PR_REVIEW
 
 ## Stage Schema
 
@@ -162,6 +164,12 @@ For every /sdlc or /sdlc-resume invocation:
 - Never auto-chain into the next stage in the same invocation.
 - Continue only when the human explicitly runs the next command and replies approve.
 
+For /sdlc-pr-review invocation:
+
+- Force current stage to PR_REVIEW before stage execution.
+- Execute PR_REVIEW as the first and only stage for that invocation.
+- Apply normal success/failure state persistence and stop for human approval.
+
 ## Failure Routing
 
 - If TESTING fails due to implementation defects:
@@ -173,6 +181,15 @@ For every /sdlc or /sdlc-resume invocation:
   - set CODE_REVIEW = FAILED with review findings in reason
   - route back to IMPLEMENTATION with code review findings and required artifacts
   - rerun TESTING, then rerun CODE_REVIEW
+
+- If PR_REVIEW returns STATUS: CHANGES_REQUESTED:
+  - set PR_REVIEW = FAILED with PR findings in reason
+  - require `.sdlc/pr-change-required.md` and human selection in `.sdlc/pr-resolution-plan.md`
+  - if `resolve-with-dev` contains one or more IDs:
+    - route to IMPLEMENTATION with selected IDs and required artifacts
+    - rerun TESTING, then rerun CODE_REVIEW, then rerun DELIVERY, then rerun PR_REVIEW
+  - if only `resolve-comments-only` IDs are selected:
+    - rerun PR_REVIEW directly to resolve comment-only threads and re-evaluate status
 
 ## Retry Limit
 
@@ -186,7 +203,7 @@ For every /sdlc or /sdlc-resume invocation:
 
 Mark workflow COMPLETED only when:
 
-- REQUIREMENT, PLANNING, DESIGN, IMPLEMENTATION, TESTING, CODE_REVIEW are COMPLETED
+- REQUIREMENT, PLANNING, DESIGN, IMPLEMENTATION, TESTING, CODE_REVIEW, DELIVERY, and PR_REVIEW are COMPLETED
 
 Then:
 

@@ -32,6 +32,10 @@ CODE_REVIEW = COMPLETED
 8. Create pull request from the pushed branch.
 9. Generate delivery report.
 
+If a PR already exists for the workflow branch, do not create a second PR.
+Push follow-up commits to the same branch and update the delivery report with
+the existing PR reference.
+
 ## Git Rules
 
 - Before this agent runs:
@@ -44,6 +48,15 @@ CODE_REVIEW = COMPLETED
 ## Output
 
 Create .sdlc/delivery-summary.md.
+
+Delivery summary must include:
+
+- OWNER: <github-owner>
+- REPO: <github-repo>
+- PR_NUMBER: <number>
+- PR_URL: <url>
+- BRANCH: <branch>
+- COMMIT: <commit>
 
 Return:
 

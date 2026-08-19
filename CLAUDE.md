@@ -29,11 +29,14 @@ Each release record shape:
 
 This repo is configured with a full SDLC agent pipeline. Use `/sdlc <requirement>` to start a new workflow or `/sdlc-resume` to continue from the last incomplete stage.
 
-**Stages (in order):** REQUIREMENT → PLANNING → DESIGN → IMPLEMENTATION → TESTING → CODE_REVIEW → DELIVERY
+**Stages (in order):** REQUIREMENT → PLANNING → DESIGN → IMPLEMENTATION → TESTING → CODE_REVIEW → DELIVERY → PR_REVIEW
 
 Each stage maps to a specialized agent (`.claude/agents/`). The orchestrator persists state to `.sdlc/workflow-state.json`. Each stage requires explicit human approval (`approve` / `update: <feedback>` / `reject`) before the next stage runs — never auto-chains.
 
 Use `/sdlc-review` to run a standalone code review and `/sdlc-deliver` to create a branch, commit, push, and open a PR.
+Use `/sdlc-pr-review` to start directly at PR_REVIEW, review the live PR, add inline review comments, and generate `.sdlc/pr-change-required.md`.
+When changes are requested, provide two lists: `resolve-with-dev` and `resolve-comments-only`.
+Continue PR-resolution using `/sdlc-pr-review` (not `/sdlc-resume`) until PR_REVIEW is approved.
 
 ## MCP Servers
 

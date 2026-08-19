@@ -18,7 +18,7 @@ The workflow runner MUST:
    REASON: No existing SDLC workflow was found.
 3. If present, read state and resume from the first stage marked FAILED, IN_PROGRESS, or NOT_STARTED.
 4. Do not rerun COMPLETED stages unless later-stage failure requires rework.
-5. Resume from IMPLEMENTATION when failure cause is implementation defect, TESTING implementation defect, or CODE_REVIEW CHANGES_REQUESTED.
+5. Resume from IMPLEMENTATION when failure cause is implementation defect, TESTING implementation defect, CODE_REVIEW CHANGES_REQUESTED, or PR_REVIEW CHANGES_REQUESTED.
 6. If workflow is COMPLETED, return STATUS: ALREADY_COMPLETED.
 7. If workflow is BLOCKED, return STATUS: BLOCKED with reason and do not continue automatically.
 8. Persist state after each stage transition.
@@ -33,6 +33,7 @@ The workflow runner MUST:
 - TESTING -> `tests`
 - CODE_REVIEW -> `code-review-agent`
 - DELIVERY -> `delivery`
+- PR_REVIEW -> `pr-review-agent`
 
 ## Important
 
