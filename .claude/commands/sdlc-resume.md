@@ -45,3 +45,7 @@ The command must:
 - invoke the correct stage agent
 - update state
 - stop after one stage and wait for explicit human approval
+
+If the resume stage is `PR_REVIEW`, follow:
+
+- `.claude/commands/sdlc-pr-review.md`

@@ -40,6 +40,12 @@ Run SDLC directly without using `orchestrator-agent`.
 	- CODE_REVIEW -> `code-review-agent`
 	- DELIVERY -> `delivery`
 	- PR_REVIEW -> `pr-review-agent`
+
+
+If the selected stage is `PR_REVIEW`, apply the PR-specific workflow rules
+defined in `.claude/commands/sdlc-pr-review.md` before and after invoking
+`pr-review-agent`.
+
 - Verify expected artifact exists in `.sdlc/`.
 - On success: mark stage `COMPLETED`, set reason/artifact/completed_at, and persist state.
 - On failure: mark stage `FAILED`, capture reason, set artifact `null` if missing, increment retry_count, and persist state.
