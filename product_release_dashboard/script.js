@@ -8,29 +8,44 @@ const breakingFilterSelect = document.getElementById("breaking-filter");
 
 let releases = loadReleases();
 
+let editingId = null;
+
+const cancelEditBtn = document.getElementById("cancel-edit");
+const createReleaseTitle = document.getElementById("create-release-title");
+const submitBtn = releaseForm.querySelector('button[type="submit"]');
+
 renderReleaseList();
 
 releaseForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const formData = new FormData(releaseForm);
-  const release = {
-    id: crypto.randomUUID(),
-    product: String(formData.get("product") || "").trim(),
-    version: String(formData.get("version") || "").trim(),
-    title: String(formData.get("title") || "").trim(),
+  const fields = {
+    product:     String(formData.get("product")     || "").trim(),
+    version:     String(formData.get("version")     || "").trim(),
+    title:       String(formData.get("title")       || "").trim(),
     description: String(formData.get("description") || "").trim(),
     releaseDate: String(formData.get("releaseDate") || ""),
-    isBreaking: formData.get("breaking") === "on"
+    isBreaking:  formData.get("breaking") === "on"
   };
 
-  if (!release.product || !release.version || !release.title || !release.description || !release.releaseDate) {
+  if (!fields.product || !fields.version || !fields.title || !fields.description || !fields.releaseDate) {
     return;
   }
 
-  releases.unshift(release);
+  if (editingId !== null) {
+    const idx = releases.findIndex(r => r.id === editingId);
+    if (idx !== -1) {
+      releases[idx] = { ...releases[idx], ...fields };
+    }
+    cancelEdit();
+  } else {
+    const release = { id: crypto.randomUUID(), ...fields };
+    releases.unshift(release);
+    releaseForm.reset();
+  }
+
   saveReleases(releases);
-  releaseForm.reset();
   renderReleaseList();
 });
 
@@ -58,6 +73,47 @@ function loadReleases() {
 function saveReleases(items) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 }
+
+function deleteRelease(id) {
+  if (!window.confirm('Delete this release note? This cannot be undone.')) return;
+  if (editingId === id) {
+    cancelEdit();
+  }
+  releases = releases.filter(r => r.id !== id);
+  saveReleases(releases);
+  renderReleaseList();
+}
+
+function startEditRelease(id) {
+  const release = releases.find(r => r.id === id);
+  if (!release) return;
+
+  editingId = id;
+
+  document.getElementById("product").value = release.product;
+  document.getElementById("version").value = release.version;
+  document.getElementById("title").value = release.title;
+  document.getElementById("description").value = release.description;
+  document.getElementById("releaseDate").value = release.releaseDate;
+  document.getElementById("breaking").checked = release.isBreaking;
+
+  createReleaseTitle.textContent = "Edit Release Note";
+  submitBtn.textContent = "Save Changes";
+  cancelEditBtn.hidden = false;
+
+  releaseForm.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  document.getElementById("product").focus();
+}
+
+function cancelEdit() {
+  editingId = null;
+  releaseForm.reset();
+  createReleaseTitle.textContent = "Create a Release Note";
+  submitBtn.textContent = "Add Release Note";
+  cancelEditBtn.hidden = true;
+}
+
+cancelEditBtn.addEventListener("click", () => { cancelEdit(); renderReleaseList(); });
 
 function renderReleaseList() {
   const productQuery = productFilterInput.value.trim().toLowerCase();
@@ -95,6 +151,20 @@ function renderReleaseList() {
     const badge = card.querySelector(".badge");
     badge.textContent = release.isBreaking ? "Breaking Change" : "Non-Breaking";
     badge.classList.add(release.isBreaking ? "breaking" : "safe");
+
+    const editBtn = card.querySelector(".btn-edit");
+    const deleteBtn = card.querySelector(".btn-delete");
+
+    if (release.id === editingId) {
+      card.classList.add("editing");
+      editBtn.disabled = true;
+    }
+
+    editBtn.setAttribute("aria-label", `Edit ${release.product} ${release.version}`);
+    deleteBtn.setAttribute("aria-label", `Delete ${release.product} ${release.version}`);
+
+    editBtn.addEventListener("click", () => startEditRelease(release.id));
+    deleteBtn.addEventListener("click", () => deleteRelease(release.id));
 
     releaseList.appendChild(card);
   }

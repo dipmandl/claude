@@ -150,6 +150,7 @@ select:focus {
 .form-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
 }
 
 button {
@@ -211,6 +212,11 @@ button:hover {
   background: #fff8f5;
 }
 
+.release-card.editing {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .card-top {
   display: flex;
   justify-content: space-between;
@@ -259,6 +265,43 @@ button:hover {
   text-align: center;
 }
 
+/* ── Card action buttons ── */
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-edit,
+.btn-delete {
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 8px;
+  min-height: 36px;
+  min-width: 60px;
+}
+
+/* .btn-edit inherits accent gradient from base button selector */
+
+.btn-delete {
+  background: linear-gradient(130deg, var(--danger), #9b3010);
+}
+
+/* ── Form cancel button ── */
+.btn-cancel {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.btn-cancel:hover {
+  background: var(--bg-2);
+  filter: none;
+  transform: none;
+}
+
 @media (max-width: 760px) {
   .container {
     width: min(1000px, 95vw);
@@ -275,9 +318,14 @@ button:hover {
 
   .form-actions {
     justify-content: stretch;
+    flex-direction: column;
   }
 
   .form-actions button {
     width: 100%;
+  }
+
+  .card-actions {
+    flex-wrap: wrap;
   }
 }
